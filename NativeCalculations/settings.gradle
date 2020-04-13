@@ -1,0 +1,3 @@
+rootProject.name='Native Calculations'
+include ':app'
+include ':nativecalculations'

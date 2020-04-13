@@ -1,0 +1,54 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // TODO: Change to local Unity classes jar location
+    compileOnly files('/Applications/Unity/Hub/Editor/2018.4.19f1/PlaybackEngines/AndroidPlayer/Variations/mono/Release/Classes/classes.jar')
+
+    api 'androidx.appcompat:appcompat:1.1.0'
+    implementation files('libs/gson-2.8.6.jar')
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}
+
+afterEvaluate {
+    assembleDebug.finalizedBy(exportAARDebug)
+}
+
+task deleteOldAARDebug(type: Delete) {
+    delete '../../UnityPluginExample/Assets/Plugins/Android/nativecalculations-debug.aar'
+}
+
+task exportAARDebug(type: Copy) {
+    from('build/outputs/aar')
+    include('nativecalculations-debug.aar')
+    into('../../UnityPluginExample/Assets/Plugins/Android')
+}
+
+exportAARDebug.dependsOn(deleteOldAARDebug)
