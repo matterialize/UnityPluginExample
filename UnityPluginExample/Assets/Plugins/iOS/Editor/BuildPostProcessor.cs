@@ -18,7 +18,7 @@ public class BuildPostProcessor
             project.ReadFromFile(projectPath);
 
             // Get targetGUID
-            var targetName = PBXProject.GetUnityTargetName();
+            var targetName = project.GetUnityFrameworkTargetGuid();
             var targetGUID = project.TargetGuidByName(targetName);
 
             // Built in Frameworks
